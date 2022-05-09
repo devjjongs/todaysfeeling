@@ -14,3 +14,13 @@
     font-weight: bold;
     width: 250px;
 }
+
+.body_left {
+    margin-left: 20px;
+}
+
+.image_preview {
+    min-height: 400px;
+}
+
+

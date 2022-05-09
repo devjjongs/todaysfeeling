@@ -14,15 +14,38 @@
 
     <title>Today's Vibe</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
     <link rel="stylesheet" type="text/css" href="../static/css/post.css">
 
+<!--    미리보기를 위해 필요한 것-->
+    <script src="http://madalla.kr/js/jquery-1.8.3.min.js"></script>
+
+
     <script>
+        // 메인페이지로 넘어가는 함수
         function go_to_mainpage() {
              location.href = "index.html"
         }
 
+        // 미리보기 함수
+        $(function () {
+            $("#myFile").on('change', function () {
+                readURL(this);
+            });
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#View').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 
 </head>
@@ -34,6 +57,21 @@
             </div>
             <div class="h1_wrap">
                 <h1 onclick="go_to_mainpage()" class="title_h1">Today's Vibe</h1>
+            </div>
+        </div>
+        <div class="body_wrap>">
+            <div class="body_left">
+                <form id="imgForm">
+                    <div class="image_preview">
+                        <img id="View" src="#" alt="이미지 미리보기" />
+                    </div>
+                    <div>
+                        <input type='file' id="myFile" />
+                    </div>
+                </form>
+            </div>
+            <div class="body_right">
+
             </div>
         </div>
     </div>
