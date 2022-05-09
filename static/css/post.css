@@ -1,0 +1,12 @@
+.title_wrap {
+    margin: 20px auto auto 20px;
+}
+
+.h1_wrap {
+    overflow:auto;
+}
+
+.title {
+    text-align: center;
+    font-weight: bold;
+}
