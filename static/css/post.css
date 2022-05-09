@@ -1,12 +1,16 @@
-.title_wrap {
+.title_button_wrap {
     margin: 20px auto auto 20px;
 }
 
 .h1_wrap {
-    overflow:auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.title {
+.title_h1 {
     text-align: center;
     font-weight: bold;
+    width: 250px;
 }
