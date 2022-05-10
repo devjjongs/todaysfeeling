@@ -37,6 +37,7 @@
             });
         });
 
+        // 미리보기 함수
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -45,6 +46,17 @@
                 }
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+
+        function post_upload() {
+            // 이미지 AWS S3로 넣기
+
+            // let user_id = 뭔가 넣어야 됨
+            let weather = $(':input:radio[name=weather]:checked').val();
+            let one_word = $('#text_area').val();
+            let tag = $('#tag_area').val();
+            console.log(weather, one_word, tag)
+            // 모두 처리하고 메인페이지로 가야됨
         }
     </script>
 
@@ -63,10 +75,10 @@
             <div class="body_left">
                 <form id="imgForm">
                     <div class="image_preview">
-                        <img id="preview" src="#" alt="이미지 미리보기" />
+                        <img class="preview" id="preview" src="#" alt="이미지 미리보기" />
                     </div>
                     <div id="file_input">
-                        <input type='file' id="myFile" />
+                        <input class="myFile" type='file' id="myFile" />
                     </div>
                 </form>
             </div>
@@ -74,7 +86,7 @@
                 <h3>내 마음 날씨 선택</h3>
                 <div class="weather_select">
                     <label>
-                        <input type="radio" name="weather" value="sunny">
+                        <input type="radio" name="weather" value="sunny" checked>
                         <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/sun_2600-fe0f.png">
                     </label>
                     <label>
@@ -96,15 +108,15 @@
                 </div>
                 <h3>한마디</h3>
                 <div class="input-group1">
-                    <textarea class="form-control" aria-label="With textarea"></textarea>
+                    <textarea id="text_area" class="form-control" aria-label="With textarea" maxlength = "100"></textarea>
                 </div>
                 <h3>태그</h3>
                 <div class="input-group2">
                     <span class="input-group-text1" id="basic-addon1">#</span>
-                    <textarea class="form-control1" aria-label="With textarea"></textarea>
+                    <textarea id="tag_area" class="form-control1" aria-label="With textarea" maxlength = "10"></textarea>
                 </div>
                 <div class="post_upload">
-                    <button type="button" class="btn btn-outline-secondary">게시물 올리기</button>
+                    <button onclick="post_upload()" type="button" class="btn btn-outline-secondary">게시물 올리기</button>
                 </div>
             </div>
         </div>

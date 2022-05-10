@@ -9,6 +9,11 @@
     align-items: center;
 }
 
+.fa fa-window-close {
+    width: 30px;
+    height: 30px;
+}
+
 .title_h1 {
     text-align: center;
     font-weight: bold;
@@ -48,7 +53,7 @@
 }
 
 .input-group2 {
-    width: 150px;
+    width: 170px;
 }
 
 .input-group-text1 {
@@ -58,13 +63,19 @@
 
 .form-control1 {
     display:inline-block;
-    width: 130px;
+    width: 150px;
     height: 30px;
 }
 
 .post_upload {
     margin-top: 30px;
     text-align: center;
+}
+
+.preview {
+    object-fit: contain;
+    max-width: 80%;
+    margin-bottom: 20px;
 }
 
 [type=radio] {
