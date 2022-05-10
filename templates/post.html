@@ -27,7 +27,7 @@
     <script>
         // 메인페이지로 넘어가는 함수
         function go_to_mainpage() {
-             location.href = "index.html"
+             window.location.href = "index.html"
         }
 
         // 미리보기 함수
@@ -41,7 +41,7 @@
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    $('#View').attr('src', e.target.result);
+                    $('#preview').attr('src', e.target.result);
                 }
                 reader.readAsDataURL(input.files[0]);
             }
@@ -63,15 +63,49 @@
             <div class="body_left">
                 <form id="imgForm">
                     <div class="image_preview">
-                        <img id="View" src="#" alt="이미지 미리보기" />
+                        <img id="preview" src="#" alt="이미지 미리보기" />
                     </div>
-                    <div>
+                    <div id="file_input">
                         <input type='file' id="myFile" />
                     </div>
                 </form>
             </div>
             <div class="body_right">
-
+                <h3>내 마음 날씨 선택</h3>
+                <div class="weather_select">
+                    <label>
+                        <input type="radio" name="weather" value="sunny">
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/sun_2600-fe0f.png">
+                    </label>
+                    <label>
+                        <input type="radio" name="weather" value="cloudy">
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/cloud_2601-fe0f.png">
+                    </label>
+                    <label>
+                        <input type="radio" name="weather" value="rainy">
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/cloud-with-rain_1f327-fe0f.png">
+                    </label>
+                    <label>
+                        <input type="radio" name="weather" value="snow">
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/snowman_2603-fe0f.png">
+                    </label>
+                    <label>
+                        <input type="radio" name="weather" value="windy">
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/tornado_1f32a-fe0f.png">
+                    </label>
+                </div>
+                <h3>한마디</h3>
+                <div class="input-group1">
+                    <textarea class="form-control" aria-label="With textarea"></textarea>
+                </div>
+                <h3>태그</h3>
+                <div class="input-group2">
+                    <span class="input-group-text1" id="basic-addon1">#</span>
+                    <textarea class="form-control1" aria-label="With textarea"></textarea>
+                </div>
+                <div class="post_upload">
+                    <button type="button" class="btn btn-outline-secondary">게시물 올리기</button>
+                </div>
             </div>
         </div>
     </div>
