@@ -26,48 +26,56 @@
     <link rel="stylesheet" type="text/css" href="../static/css/post.css">
 
 
-
     <script>
 
         // 메인페이지로 넘어가는 함수
         function go_to_mainpage() {
-             window.location.href = "index.html"
+             window.location.href = "/"
         }
 
         // 로그아웃 함수
         function log_out() {
             $.removeCookie('mytoken', {path: '/'});
             alert('로그아웃!');
-            window.location.href = "login.html"
+            window.location.href = "/login"
         }
 
         // 포스팅 함수
         function post_upload() {
-            // 이미지 AWS S3로 넣기
+            var fileCheck = document.getElementById("photoBtn").value;
+            if (!fileCheck) {
+                alert("파일을 첨부해 주세요");
+                return;
+            } else {
 
-            // POST로 보낼 정보들, ID는 app.py에서 쿠키로 처리함
-            let today = new Date().toISOString()
-            let weather = $(':input:radio[name=weather]:checked').val();
-            let one_word = $('#text_area').val();
-            let tag = $('#tag_area').val();
-            // 콘솔로그는 개발완료 후 지우기
-            console.log(today, weather, one_word, tag)
+                // POST로 보낼 정보들, ID는 app.py에서 쿠키로 처리함
+                let weather = $(':input:radio[name=weather]:checked').val();
+                let word = $('#text_area').val();
+                let tag = $('#tag_area').val();
 
-            // POST로 정보 넘기기
-            $.ajax({
-                type: "POST",
-                url: "/writing",
-                data: {
-                    date_give: today,
-                    weather_give: weather,
-                    word_give: one_word,
-                    tag_give: tag
-                },
-                success: function (response) {
-                    alert(response['msg'])
-                    window.location.href = "/"
-                }
-            })
+                // 이미지 저장
+                let file = $('#photoBtn')[0].files[0]
+                let form_data = new FormData()
+
+                form_data.append("file_give", file)
+                form_data.append("weather_give", weather)
+                form_data.append("word_give", word)
+                form_data.append("tag_give", tag)
+
+                // POST로 정보 넘기기
+                $.ajax({
+                    type: "POST",
+                    url: "/writing",
+                    data: form_data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        alert(response['msg'])
+                        window.location.href = "/"
+                    }
+                })
+            }
         }
 
         $(function(){
@@ -113,7 +121,7 @@
                 <div class="photo_box">
                     <div class="upload_btn">
                         <div class="upload">
-                            <input type="file" name="photoBtn" accept="image/jpeg, image/png" capture="camera" id="photoBtn">
+                            <input type="file" name="photoBtn" accept="image/jpeg, image/png" capture="camera" id="photoBtn" onChange={firstImgHandle}>
                             <label class="photoBtnWrap" for="photoBtn">사진첨부하기</label>
                         </div>
                     </div>
