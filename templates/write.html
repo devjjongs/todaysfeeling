@@ -5,20 +5,172 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!--    부트스크랩 링크-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--    Jquery 사용-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--    부트스크랩 사용-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
     <title>Today's Vibe</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <!--    파일업로드 라이브러리-->
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="../static/css/common.css"><!--CSS적용-->
+    <!--    폰트와 css-->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/post.css">
+
+
+    <script>
+
+        // 메인페이지로 넘어가는 함수
+        function go_to_mainpage() {
+            window.location.href = "/"
+        }
+
+        // 로그아웃 함수
+        function log_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+
+        // 포스팅 함수
+        function post_upload() {
+            var fileCheck = document.getElementById("photoBtn").value;
+            if (!fileCheck) {
+                alert("파일을 첨부해 주세요");
+                return;
+            } else {
+
+                // POST로 보낼 정보들, ID는 app.py에서 쿠키로 처리함
+                let weather = $(':input:radio[name=weather]:checked').val();
+                let word = $('#text_area').val();
+                let tag = $('#tag_area').val();
+
+                // 이미지 저장
+                let file = $('#photoBtn')[0].files[0]
+                let form_data = new FormData()
+
+                form_data.append("file_give", file)
+                form_data.append("weather_give", weather)
+                form_data.append("word_give", word)
+                form_data.append("tag_give", tag)
+
+                // POST로 정보 넘기기
+                $.ajax({
+                    type: "POST",
+                    url: "/writing",
+                    data: form_data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        alert(response['msg'])
+                        window.location.href = "/"
+                    }
+                })
+            }
+        }
+
+        $(function () {
+            // 사진 업로드 버튼
+            $('#photoBtn').on('change', function () {
+                $('them_img').empty().append('<img id="image" scr="">');
+                var image = $('#image')
+                var imgFile = $('#photoBtn').val();
+                var fileForm = /(.*?)\.(jpg|jpeg|png)$/;
+                // 이미지가 확장자 확인 후 노출
+                if (imgFile.match(fileForm)) {
+                    var reader = new FileReader();
+                    reader.onload = function (event) {
+                        image.attr("src", event.target.result);
+                    };
+                    reader.readAsDataURL(event.target.files[0]);
+                } else {
+                    alert("이미지 파일(jpg,png형식의 파일)만 올려주세요");
+                    $('#photoBtn').focus();
+                    return;
+                }
+            });
+        });
+    </script>
+
 </head>
 <body>
-
+    <div class="wrap">
+        <div class="head_wrap">
+            <div class="title_button_wrap">
+                <!--                로그+네비게이션 바로 수정필요, 웹개발 플러스 4-10강-->
+                <button onclick="go_to_mainpage()" type="button" class="btn btn-outline-secondary">X</button>
+                <div class="logout_wrap">
+                    <button onclick="log_out()" type="button" class="btn btn-outline-secondary">Log Out</button>
+                </div>
+            </div>
+            <div class="h1_wrap">
+                <h1 onclick="go_to_mainpage()" class="title_h1">Today's Vibe</h1>
+            </div>
+        </div>
+        <div class="body_wrap>">
+            <div class="body_left">
+                <div class="photo_box">
+                    <div class="upload_btn">
+                        <div class="upload">
+                            <input type="file" name="photoBtn" accept="image/jpeg, image/png" capture="camera"
+                                   id="photoBtn" onChange={firstImgHandle}>
+                            <label class="photoBtnWrap" for="photoBtn">사진첨부하기</label>
+                        </div>
+                    </div>
+                    <div class="photo_them">
+                        <div class="them_img">
+                            <img id="image" scr="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="body_right">
+                <h3>내 마음 날씨 선택</h3>
+                <div class="weather_select">
+                    <label>
+                        <input type="radio" name="weather" value="sunny" checked>
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/sun_2600-fe0f.png">
+                    </label>
+                    <label>
+                        <input type="radio" name="weather" value="cloudy">
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/cloud_2601-fe0f.png">
+                    </label>
+                    <label>
+                        <input type="radio" name="weather" value="rainy">
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/cloud-with-rain_1f327-fe0f.png">
+                    </label>
+                    <label>
+                        <input type="radio" name="weather" value="snow">
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/snowman_2603-fe0f.png">
+                    </label>
+                    <label>
+                        <input type="radio" name="weather" value="windy">
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/tornado_1f32a-fe0f.png">
+                    </label>
+                </div>
+                <h3>한마디</h3>
+                <div class="input-group1">
+                    <textarea id="text_area" class="form-control" aria-label="With textarea" maxlength="100"></textarea>
+                </div>
+                <h3>태그</h3>
+                <div class="input-group2">
+                    <span class="input-group-text1" id="basic-addon1">#</span>
+                    <textarea id="tag_area" class="form-control1" aria-label="With textarea" maxlength="10"></textarea>
+                </div>
+                <div class="post_upload">
+                    <button onclick="post_upload()" name="uploadBtn" type="button" class="upload_btn1">게시물 올리기</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
