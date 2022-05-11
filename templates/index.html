@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
     <!-- Webpage Title -->
     <title>Home | Today's Vibe</title>
@@ -28,13 +28,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script>
         $(document).ready(function () {
-            show_writes();
+            get_posts();
         });
 
-        function show_writes() {
+        function get_posts() {
             $.ajax({
                 type: "GET",
-                url: "/writes",
+                url: "/get_posts",
                 data: {},
                 success: function (response) {
                     alert(response["msg"])
@@ -126,17 +126,17 @@
 <div class="test">
     <section class="index-section">
         <div class="container index-container">
-            {% for travel in travels %}
+            {% for post in posts %}
             <div class="card index-card" style="border-radius:25px;">
                 <div class="card-image">
                     <figure>
-                        <a href="/detail/{{ travel.name }}"><img src="../static/{{ travel.file }}"
+                        <a href="/detail/{{ post.name }}"><img src="../static/{{ post.file }}"
                                                                  style="width:300px; height:300px; max-width: 400px; max-height: 400px;"></a>
                     </figure>
                 </div>
                 <div class="card-content">
                     <div class="content">
-                        <a class="card-title" href="/detail/{{ travel.name }}">{{ travel.name }}</a>
+                        <a class="card-title" href="/detail/{{ post.name }}">{{ post.name }}</a>
                     </div>
                 </div>
             </div>
