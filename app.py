@@ -114,7 +114,7 @@ def post_upload ():
         # 사용자 ID 추가하는 기능 필요
 
         doc = {
-            # 'username': user_info["username"],
+            'username': user_info["username"],
             'today': mytime,
             'weather': weather_receive,
             'word': word_receive,
@@ -127,6 +127,20 @@ def post_upload ():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         # return redirect(url_for("home"))
         return redirect('/')
+
+
+@app.route("/get_posts", methods=['GET'])
+def get_posts ():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 포스팅 목록 받아오기
+        posts = list(db.writes.find({}).sort("date", -1).limit(20))  # 포스트 전체 목록증 최근순으로 20개만 가져오는 코드
+        for post in posts:
+            post["_id"] = str(post["_id"])  # 포스트 작성한 id를 문자열로 바꿔준다.
+        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 # 여기까지 코드 작성 #

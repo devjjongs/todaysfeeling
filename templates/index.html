@@ -26,6 +26,7 @@
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
     <script>
         $(document).ready(function () {
             get_posts();
@@ -38,111 +39,111 @@
                 data: {},
                 success: function (response) {
                     alert(response["msg"])
-                    window.location.reload()
+                    {#window.location.reload()#}
                 }
             })
         }
     </script>
 
     <!--로그아웃 function-->
-    <!--    <script>-->
-    <!--        function sign_out() {-->
-    <!--            $.removeCookie('mytoken', {path: '/'});-->
-    <!--            alert('로그아웃!')-->
-    <!--            window.location.href = "/login"-->
-    <!--        }-->
-
-    <!--    </script>-->
+    <script>
+        function sign_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+    </script>
 
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            <img class="logo-img" src="../static/logo.png" width="112" height="28">
-        </a>
-
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
             <a class="navbar-item" href="/">
-                Home
+                <img class="logo-img" src="../static/logo.png" width="112" height="28">
             </a>
-            <!--            <div class="navbar-item has-dropdown is-hoverable">-->
-            <!--                <a class="navbar-link">-->
-            <!--                    Mypage-->
-            <!--                </a>-->
-            <!--                <div class="navbar-dropdown">-->
-            <!--                    <a class="navbar-item" onclick="window.location.href='/mypage'">-->
-            <!--                        My Comment-->
-            <!--                    </a>-->
-            <!--                    <a class="navbar-item" onclick="window.location.href='/mylike'">-->
-            <!--                        My favorite-->
-            <!--                    </a>-->
-            <!--                </div>-->
-            <!--            </div>-->
-<!--            {% if user_info.username == 'admin' %}-->
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+               data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="/">
+                    Home
+                </a>
+                <!--            <div class="navbar-item has-dropdown is-hoverable">-->
+                <!--                <a class="navbar-link">-->
+                <!--                    Mypage-->
+                <!--                </a>-->
+                <!--                <div class="navbar-dropdown">-->
+                <!--                    <a class="navbar-item" onclick="window.location.href='/mypage'">-->
+                <!--                        My Comment-->
+                <!--                    </a>-->
+                <!--                    <a class="navbar-item" onclick="window.location.href='/mylike'">-->
+                <!--                        My favorite-->
+                <!--                    </a>-->
+                <!--                </div>-->
+                <!--            </div>-->
+                {#<!--            {% if user_info.username == 'admin' %}-->
 
 <!--            <a class="navbar-item" onclick="window.location.href='/admin'">-->
 <!--                Admin-->
 <!--            </a>-->
-<!--            {% endif %}-->
-        </div>
-
-    </div>
-</nav>
-<div class="pic-title">
-    <img class="back_img" src="../static/1.jpg">
-    <span class="main-title">Today's Vibe</span>
-</div>
-<form method="GET" action="/search">
-    <div class="field is-grouped" style="width: 500px; text-align: right; margin: 0 0 100px 100px">
-        <p class="control is-expanded">
-            <input class="input" type="text" placeholder="#태그 검색.." name="name">
-        </p>
-        <p class="control">
-            <button type="submit" class="button is-info">
-                검색하기
-            </button>
-        </p>
-
-        <div class="navbar-post">
-            <div class="navbar-item">
-                <div class="buttons">
-                    <a class="button is-light" onclick="window.location.href='/writes'">
-                        내사진 올리기
-                    </a>
-                </div>
+<!--            {% endif %}-->#}
             </div>
+
         </div>
+    </nav>
+    <div class="pic-title">
+        <img class="back_img" src="../static/1.jpg">
+        <span class="main-title">Today's Vibe</span>
     </div>
-</form>
-<div class="test">
-    <section class="index-section">
-        <div class="container index-container">
-            {% for post in posts %}
-            <div class="card index-card" style="border-radius:25px;">
-                <div class="card-image">
-                    <figure>
-                        <a href="/detail/{{ post.name }}"><img src="../static/{{ post.file }}"
-                                                                 style="width:300px; height:300px; max-width: 400px; max-height: 400px;"></a>
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="content">
-                        <a class="card-title" href="/detail/{{ post.name }}">{{ post.name }}</a>
+    <form method="GET" action="/search">
+        <div class="field is-grouped" style="width: 500px; text-align: right; margin: 0 0 100px 100px">
+            <p class="control is-expanded">
+                <input class="input" type="text" placeholder="#태그 검색.." name="name">
+            </p>
+            <p class="control">
+                <button type="submit" class="button is-info">
+                    검색하기
+                </button>
+            </p>
+
+            <div class="navbar-post">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-light" onclick="window.location.href='/writes'">
+                            내사진 올리기
+                        </a>
                     </div>
                 </div>
             </div>
-            {% end for %}
         </div>
-    </section>
-</div>
+    </form>
+    <div class="test">
+        <section class="index-section">
+            <div class="container index-container">
+                {% for post in posts %}
+                <div class="card index-card" style="border-radius:25px;">
+                    <div class="card-image">
+                        <figure>
+                            <a href="/detail/{{ post.name }}"><img src="../static/{{ post.file }}"
+                                                                   style="width:300px; height:300px; max-width: 400px; max-height: 400px;"></a>
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="content">
+                            <a class="card-title" href="/detail/{{ post.name }}">{{ post.name }}</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
 </body>
 </html>
