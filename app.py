@@ -37,6 +37,11 @@ def login ():
     return render_template('login.html', msg=msg)
 
 
+@app.route('/post')
+def post ():
+    return render_template('/post.html')
+
+
 # 로그인
 @app.route('/sign_in', methods=['POST'])
 def sign_in ():
@@ -79,12 +84,49 @@ def sign_up ():
     return jsonify({'result': 'success'})
 
 
+# ID 중복확인
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup ():
-    # ID 중복확인
     username_receive = request.form['username_give']
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
+
+
+@app.route("/writing", methods=["POST"])
+def post_upload ():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        today = datetime.now()
+        mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+        weather_receive = request.form['weather_give']
+        word_receive = request.form['word_give']
+        tag_receive = request.form['tag_give']
+
+        file = request.files['file_give']
+        extension = file.filename.split('.')[-1]
+        filename = f'file-{mytime}'
+        save_to = f'static/images/{filename}.{extension}'
+
+        file.save(save_to)
+
+        # 사용자 ID 추가하는 기능 필요
+
+        doc = {
+            # 'username': user_info["username"],
+            'today': mytime,
+            'weather': weather_receive,
+            'word': word_receive,
+            'tag': tag_receive,
+            'file': f'{filename}.{extension}'
+        }
+
+        db.writes.insert_one(doc)
+        return jsonify({"result": "success", 'msg': '포스팅이 완료되었습니다.'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        # return redirect(url_for("home"))
+        return redirect('/')
 
 
 # 여기까지 코드 작성 #
