@@ -37,9 +37,9 @@ def login ():
     return render_template('login.html', msg=msg)
 
 
-# @app.route('/post')
-# def post ():
-#     return render_template('/post.html')
+@app.route('/write')
+def post ():
+    return render_template('write.html')
 
 # post 추가부분
 @app.route('/post')
