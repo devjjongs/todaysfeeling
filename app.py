@@ -12,7 +12,7 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 SECRET_KEY = 'SPARTA'
 
-client = MongoClient('13.125.6.243', 27017, username="test", password="test")
+client = MongoClient('52.79.242.245', 27017, username="test", password="test")
 db = client.dbsparta_Todays_Vibe
 
 
@@ -36,10 +36,10 @@ def login ():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
-
-# @app.route('/post')
-# def post ():
-#     return render_template('/post.html')
+# write 이동
+@app.route('/write')
+def write ():
+    return render_template('write.html')
 
 # post 추가부분
 @app.route('/post')
@@ -134,6 +134,7 @@ def post_upload ():
         return redirect('/')
 
 
+# /post : 포스팅 조회값 불러오기
 @app.route("/get_posts", methods=['GET'])
 def get_posts ():
     token_receive = request.cookies.get('mytoken')
@@ -146,6 +147,65 @@ def get_posts ():
         return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
+# /comments : 댓글 올리기
+@app.route("/post/comment_up", methods=["POST"])
+def comment_post():
+    comment_receive = request.form['comment_give']
+    doc = {
+        'comment': comment_receive
+    }
+    db.comments.insert_one(doc)
+
+    return jsonify({'msg': '댓글 작성 완료!'})
+
+
+# /comments : 댓글 값 조회하기
+@app.route("/post/comment_search", methods=["GET"])
+def comment_get():
+    comment_list = list(db.comments.find({},{'_id':False}))
+    return jsonify({'comments': comment_list})
+
+
+# # /Post : 포스팅 된 값 조회하기
+# @app.route("/get_posts_search", methods=['GET'])
+# def get_posts ():
+#     token_receive = request.cookies.get('mytoken')
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+#         # 파일이름을 받아 해당 파일의 내용만 가져오도록 하는 코드
+#         username_receive = request.args.get("username_give")
+#         filename_receive = request.args.get("filename_give")
+#         if filename_receive == "":
+#             window.location.href = "/"
+#         else:
+#             posts = list(db.posts.find({"username": username_receive}).sort("date", -1).limit(20))
+#         # # 포스팅 목록 받아오기
+#         # # 포스트 전체 목록증 최근순으로 20개만 가져오는 코드
+#         # posts = list(db.posts.find({}).sort("date", -1).limit(20))
+#         for post in posts:
+#             # 포스트 작성한 id를 문자열로 바꿔준다.
+#             post["_id"] = str(post["_id"])
+#             post["count_heart"] = db.likes.count_documents(
+#                 {"post_id": post["_id"], "type": "heart"})  # 해당 글의 하트 숫자를 카운트
+#             post["heart_by_me"] = bool(db.likes.find_one(
+#                 {"post_id": post["_id"], "type": "heart", "username": payload['id']}))  # 내가 하트를 눌렀는지 확인
+#
+#             post["count_like"] = db.likes.count_documents(
+#                 {"post_id": post["_id"], "type": "like"})  # 해당 글의 좋아요 숫자를 카운트
+#             post["like_by_me"] = bool(db.likes.find_one(
+#                 {"post_id": post["_id"], "type": "like", "username": payload['id']}))  # 내가 좋아요를 눌렀는지 확인
+#
+#             post["count_star"] = db.likes.count_documents(
+#                 {"post_id": post["_id"], "type": "star"})  # 해당 글의 별 숫자를 카운트
+#             post["star_by_me"] = bool(db.likes.find_one(
+#                 {"post_id": post["_id"], "type": "star", "username": payload['id']}))  # 내가 별을 눌렀는지 확인
+#
+#         return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
+#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+#         return redirect(url_for("home"))
+
+
 
 
 # 여기까지 코드 작성 #
