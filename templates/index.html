@@ -54,7 +54,7 @@
         }
     </script>
     <style>
-        {# 배너 CSS #}
+
         body {
             background-color: snow;
             min-height: 100vh;
@@ -88,7 +88,7 @@
 
 </head>
 <body>
-    {#배너#}
+
     <section class="hero is-snow">
         <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
             <h1 class="title is-sparta">Today's vibe</h1>
@@ -96,24 +96,7 @@
         </div>
     </section>
 
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="/">
-                <img class="logo-img" src="../static/logo.png" width="112" height="28">
-            </a>
 
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-               data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="/">
-                    Home
-                </a>
                 <!--            <div class="navbar-item has-dropdown is-hoverable">-->
                 <!--                <a class="navbar-link">-->
                 <!--                    Mypage-->
@@ -133,14 +116,7 @@
 <!--                Admin-->
 <!--            </a>-->
 <!--            {% endif %}-->#}
-            </div>
 
-        </div>
-    </nav>
-    <div class="pic-title">
-        <img class="back_img" src="../static/1.jpg">
-        <span class="main-title">Today's Vibe</span>
-    </div>
     <form method="GET" action="/search">
         <div class="field is-grouped" style="width: 500px; text-align: right; margin: 0 0 100px 100px">
             <p class="control is-expanded">
@@ -155,7 +131,7 @@
             <div class="navbar-post">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-light" onclick="window.location.href='/writes'">
+                        <a class="button is-light" onclick="window.location.href='/write'">
                             내사진 올리기
                         </a>
                     </div>
