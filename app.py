@@ -37,8 +37,9 @@ def login ():
     return render_template('login.html', msg=msg)
 
 
+# write 이동
 @app.route('/write')
-def post ():
+def write ():
     return render_template('write.html')
 
 # post 추가부분
@@ -134,6 +135,7 @@ def post_upload ():
         return redirect('/')
 
 
+# /post : 포스팅 조회값 불러오기
 @app.route("/get_posts", methods=['GET'])
 def get_posts ():
     token_receive = request.cookies.get('mytoken')
@@ -147,6 +149,44 @@ def get_posts ():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
+
+# /comments : 댓글 올리기
+@app.route("/post/comment_up", methods=["POST"])
+def comment_post():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        # 토큰을 넘겨주지 않아도 토큰리시브(쿠키스)로 항상 가져올 수 있다.
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+        user_info = db.users.find_one({"username": payload["id"]})
+        date_receive = request.form["date_give"]
+        comment_receive = request.form['comment_give']
+
+        doc = {
+            "username": user_info["username"],
+            'comment': comment_receive,
+            "date": date_receive
+        }
+        db.comments.insert_one(doc)
+
+        return jsonify({'msg': '댓글 작성 완료!'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/post')
+
+
+# /comments : 댓글 값 조회하기
+@app.route("/post/comment_search", methods=["GET"])
+def comment_get():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        # 토큰을 넘겨주지 않아도 토큰리시브(쿠키스)로 항상 가져올 수 있다.
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+        comment_list = list(db.comments.find({}, {'_id': False}))
+
+        return jsonify({'comments': comment_list})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/post')
 
 # 여기까지 코드 작성 #
 
