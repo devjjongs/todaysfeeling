@@ -16,11 +16,38 @@
             crossorigin="anonymous"></script>
 
     <title>Today's Vibe</title>
-
+    {# -- font -- #}
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../static/css/common_jy.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
 
     <style>
+        .title {
+            font-weight: 800;
+            font-size: 5rem;
+            font-family: 'Gamja Flower', cursive;
+        }
+
+        .subtitle {
+            font-size: 2rem;
+            font-family: 'Stylish', sans-serif;
+        }
+
+        .is-sparta {
+            color: #e8344e !important;
+        }
+
+        .body_wrap {
+            max-width: 1200px;
+            width: 95%; /*모바일 처리*/
+            height: 100%;
+            margin: 20px auto 0px auto;
+        }
+
         .body_left {
             margin-left: 20px;
             margin-top: 20px;
@@ -54,6 +81,7 @@
 
         .title {
             background-color: snow;
+            cursor: pointer;
         }
     </style>
     <script>
@@ -61,49 +89,67 @@
             window.location.href = "/"
         }
 
-        function save_word() {
-            $.ajax({
-                type: "POST",
-                url: `/post`,
-                data: {
-                    word_give: "",
+        $(document).ready(function () {
+            comment_get();
+        })
 
-                },
+        {## /comments : 댓글 값 조회하기#}
+        function comment_get() {
+            $.ajax({
+                type: 'GET',
+                url: '/post/comment_search',
+                data: {},
                 success: function (response) {
-                    alert(response["msg"])
+                    let rows = response['comments']
+                    for(let i=0; i<rows.length; i++) {
+                        let comment = rows[i]['comment']
+                        let username = rows[i]['username']
+
+                        let temp_html = `<tr>
+                                            <td><a href="#">${username} </a></td>
+                                            <td>${comment}</td>
+                                        </tr>`
+                        $('#comment_table').append(temp_html)
+                    }
+
                 }
             });
         }
 
-        function post() {
-            let comment = $("#comment-post").val()
+        {## /comments : 댓글 올리기#}
+        function comment_post() {
+            let comment = $('#comment').val()
             let today = new Date().toISOString()
+
             $.ajax({
-                type: "POST",
-                url: "/post/upload_comment",
+                type: 'POST',
+                url: '/post/comment_up',
                 data: {
                     comment_give: comment,
                     date_give: today
                 },
                 success: function (response) {
-                    $("#modal-post").removeClass("is-active")
+                    alert(response['msg'])
                     window.location.reload()
                 }
-            })
+            });
         }
+
     </script>
 </head>
 <body>
-
-    <div class="title" onclick="to_index()">
-        <h1 class="main_title">Today's Vibe</h1>
-        <h2 class="sub_title">오늘의 바이브</h2>
+<section onclick="to_index()" class="hero is-snow">
+    <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
+        <h1 class="title is-sparta">Today's vibe</h1>
+        <h3 class="subtitle is-sparta">오늘의 기분</h3>
     </div>
-    <div class="body_wrap">
-        <div class="body_left">
-            <figure class="image is-square"><img src="/static/images/rainjpg.jpg"></figure>
-        </div>
-        <div class="body_right">
+</section>
+<div class="body_wrap">
+    <div class="body_left">
+        <figure id="posted_img" class="image is-square"><img src="/static/images/rainjpg.jpg"></figure>
+    </div>
+    <div class="body_right">
+        <div id="posted_diary">
             <div class="block">
                 <article class="media">
                     <div class="media-left">
@@ -128,81 +174,69 @@
             <div class="block">
                 태그 : <span class="tag is-warning">#우울우울</span>
             </div>
-            <nav class="level is-mobile">
-                <div class="level-left">
-                    <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('', 'heart')">
-                        <span class="icon is-small"><i class="fa fa-heart" aria-hidden="true"></i></span>&nbsp;<span
-                            class="like-num">2.7k</span>
-                    </a>
-                </div>
-            </nav>
-            <div class="block">
-                <small>공감 한마디:</small>
-                <div class="search-box d-flex justify-content-center">
-                    <input id="input-comment" class="form-control" style="margin-right: 0.5rem"
-                           onclick='$("#modal-post").addClass("is-active")' placeholder="여기에 작성해주세요">
-                </div>
+        </div>
+        <nav class="level is-mobile">
+            <div class="level-left">
+                <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('', 'heart')">
+                    <span class="icon is-small"><i class="fa fa-heart" aria-hidden="true"></i></span>&nbsp;<span
+                        class="like-num">2.7k</span>
+                </a>
             </div>
-            <div class="modal" id="modal-post">
-                <div class="modal-background" onclick='$("#modal-post").removeClass("is-active")'></div>
-                <div class="modal-content">
-                    <div class="box">
-                        <article class="media">
-                            <div class="media-content">
-                                <div class="field">
-                                    <p class="control">
-                                        <textarea id="comment-post" class="textarea"
-                                                  placeholder="공감댓글 남기기"></textarea>
-                                    </p>
-                                </div>
-                                <nav class="level is-mobile">
-                                    <div class="level-left">
-
-                                    </div>
-                                    <div class="level-right">
-                                        <div class="level-item">
-                                            <a class="button is-sparta" onclick="post()">댓글남기기</a>
-                                        </div>
-                                        <div class="level-item">
-                                            <a class="button is-sparta is-outlined"
-                                               onclick='$("#modal-post").removeClass("is-active")'>취소</a>
-                                        </div>
-                                    </div>
-                                </nav>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-                <button class="modal-close is-large" aria-label="close"
-                        onclick='$("#modal-post").removeClass("is-active")'></button>
+        </nav>
+        <div class="block">
+            <small>공감 한마디:</small>
+            <div class="search-box d-flex justify-content-center">
+                <input id="input-comment" class="form-control" style="margin-right: 0.5rem"
+                       onclick='$("#modal-post").addClass("is-active")' placeholder="여기에 작성해주세요">
             </div>
         </div>
-        <table class="table">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col" style="width:30%">ID</th>
-                    <th scope="col">응원 댓글</th>
+        <div class="modal" id="modal-post">
+            <div class="modal-background" onclick='$("#modal-post").removeClass("is-active")'></div>
+            <div class="modal-content">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="field">
+                                <p class="control">
+                                        <textarea id="comment" class="textarea"
+                                                  placeholder="공감댓글 남기기"></textarea>
+                                </p>
+                            </div>
+                            <nav class="level is-mobile">
+                                <div class="level-left">
 
-                </tr>
-            </thead>
-            <tbody id="tbody-box">
-                <tr id="word-word">
-                    <td><a href="#">힘내!! </a></td>
-                    <td>성장이 목표니까 해낼 수 있어요. !!
-                    </td>
-                </tr>
-                <tr id="word-dictionary">
-                    <td><a href="#">하루가 일주일</a></td>
-                    <td>너무너무 힘드네요.
-                    </td>
-                </tr>
-                <tr id="word-name">
-                    <td><a href="#">브런치 충돌</a></td>
-                    <td>사고치면서 배우는거지 모..하지만.. 더이상은 ..</td>
-                </tr>
-            </tbody>
-        </table>
-
+                                </div>
+                                <div class="level-right">
+                                    <div class="level-item">
+                                        <a class="button is-sparta" onclick="comment_post()">댓글남기기</a>
+                                    </div>
+                                    <div class="level-item">
+                                        <a class="button is-sparta is-outlined"
+                                           onclick='$("#modal-post").removeClass("is-active")'>취소</a>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close"
+                    onclick='$("#modal-post").removeClass("is-active")'></button>
+        </div>
     </div>
+    <table class="table" style="background-color: snow">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col" style="width:30%">ID</th>
+            <th scope="col">응원 댓글</th>
+
+        </tr>
+        </thead>
+        <tbody id="comment_table">
+
+        </tbody>
+    </table>
+
+</div>
 </body>
 </html>
