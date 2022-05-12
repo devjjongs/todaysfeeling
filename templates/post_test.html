@@ -16,38 +16,11 @@
             crossorigin="anonymous"></script>
 
     <title>Today's Vibe</title>
-    {# -- font -- #}
-    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common_jy.css">
 
     <style>
-        .title {
-            font-weight: 800;
-            font-size: 5rem;
-            font-family: 'Gamja Flower', cursive;
-        }
-
-        .subtitle {
-            font-size: 2rem;
-            font-family: 'Stylish', sans-serif;
-        }
-
-        .is-sparta {
-            color: #e8344e !important;
-        }
-
-        .body_wrap {
-            max-width: 1200px;
-            width: 95%; /*모바일 처리*/
-            height: 100%;
-            margin: 20px auto 0px auto;
-        }
-
         .body_left {
             margin-left: 20px;
             margin-top: 20px;
@@ -81,67 +54,56 @@
 
         .title {
             background-color: snow;
-            cursor: pointer;
         }
 
+        {#여기서부터 현빈 만짐#}
         .like-num {
             color: red;
         }
+        {#여기까지 현빈 만짐#}
+
     </style>
     <script>
         function to_index() {
             window.location.href = "/"
         }
 
-        $(document).ready(function () {
-            comment_get();
-        })
-
-        {## /comments : 댓글 값 조회하기#}
-
-        function comment_get() {
+        function save_word() {
             $.ajax({
-                type: 'GET',
-                url: '/post/comment_search',
-                data: {},
+                type: "POST",
+                url: `/post`,
+                data: {
+                    word_give: "",
+
+                },
                 success: function (response) {
-                    let rows = response['comments']
-                    for (let i = 0; i < rows.length; i++) {
-                        let comment = rows[i]['comment']
-                        let username = rows[i]['username']
-
-                        let temp_html = `<tr>
-                                            <td><a href="#">${username} </a></td>
-                                            <td>${comment}</td>
-                                        </tr>`
-                        $('#comment_table').append(temp_html)
-                    }
-
+                    alert(response["msg"])
                 }
             });
         }
 
-        {## /comments : 댓글 올리기#}
-
-        function comment_post() {
-            let comment = $('#comment').val()
+        function post() {
+            let comment = $("#comment-post").val()
             let today = new Date().toISOString()
-
             $.ajax({
-                type: 'POST',
-                url: '/post/comment_up',
+                type: "POST",
+                url: "/post/upload_comment",
                 data: {
                     comment_give: comment,
                     date_give: today
                 },
                 success: function (response) {
-                    alert(response['msg'])
+                    $("#modal-post").removeClass("is-active")
                     window.location.reload()
                 }
-            });
+            })
         }
 
-        // 좋아요 버튼 표시
+{#여기서부터 현빈 만짐#}
+
+{#        임시 실험용 post_id임. index에서 받아서 와야 됨#}
+
+
         function toggle_like(post_id) {
             console.log(post_id)
             let $a_like = $(`#a[aria-label='heart']`)
@@ -177,45 +139,45 @@
 
             }
         }
+
+{#여기까지 현빈 만짐#}
     </script>
 </head>
 <body>
-    <section onclick="to_index()" class="hero is-snow">
-        <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
-            <h1 class="title is-sparta">Today's vibe</h1>
-            <h3 class="subtitle is-sparta">오늘의 기분</h3>
-        </div>
-    </section>
+
+
+    <div class="title" onclick="to_index()">
+        <h1 class="main_title">Today's Vibe</h1>
+        <h2 class="sub_title">오늘의 바이브</h2>
+    </div>
     <div class="body_wrap">
         <div class="body_left">
-            <figure id="posted_img" class="image is-square"><img src="/static/images/rainjpg.jpg"></figure>
+            <figure class="image is-square"><img src="/static/images/rainjpg.jpg"></figure>
         </div>
         <div class="body_right">
-            <div id="posted_diary">
-                <div class="block">
-                    <article class="media">
-                        <div class="media-left">
-                            <figure class="image is-64x64">
-                                <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/sun_2600-fe0f.png"
-                                     alt="Image">
-                            </figure>
-                        </div>
-                        <div class="media-content">
-                            <div class="content">
-                                <p>
-                                    <strong><span style="color:red">ㅇㅇ</span>의 마음날씨</strong>
-                                    <br>
-                                <li>작성 날짜</li>
+            <div class="block">
+                <article class="media">
+                    <div class="media-left">
+                        <figure class="image is-64x64">
+                            <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/sun_2600-fe0f.png"
+                                 alt="Image">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong><span style="color:red">ㅇㅇ</span>의 마음날씨</strong>
                                 <br>
-                                작성된 글 조회하는 공간입니다. 많이 쓴 글은 어떻게 보여줘야할지 고민이네요...97일 남았는데 나는 과연 할 수 있을까? 멘붕이다.
-                                </p>
-                            </div>
+                            <li>작성 날짜</li>
+                            <br>
+                            작성된 글 조회하는 공간입니다. 많이 쓴 글은 어떻게 보여줘야할지 고민이네요...97일 남았는데 나는 과연 할 수 있을까? 멘붕이다.
+                            </p>
                         </div>
-                    </article>
-                </div>
-                <div class="block">
-                    태그 : <span class="tag is-warning">#우울우울</span>
-                </div>
+                    </div>
+                </article>
+            </div>
+            <div class="block">
+                태그 : <span class="tag is-warning">#우울우울</span>
             </div>
             <nav class="level is-mobile">
                 <div class="level-left">
@@ -240,7 +202,7 @@
                             <div class="media-content">
                                 <div class="field">
                                     <p class="control">
-                                        <textarea id="comment" class="textarea"
+                                        <textarea id="comment-post" class="textarea"
                                                   placeholder="공감댓글 남기기"></textarea>
                                     </p>
                                 </div>
@@ -250,7 +212,7 @@
                                     </div>
                                     <div class="level-right">
                                         <div class="level-item">
-                                            <a class="button is-sparta" onclick="comment_post()">댓글남기기</a>
+                                            <a class="button is-sparta" onclick="post()">댓글남기기</a>
                                         </div>
                                         <div class="level-item">
                                             <a class="button is-sparta is-outlined"
@@ -266,7 +228,7 @@
                         onclick='$("#modal-post").removeClass("is-active")'></button>
             </div>
         </div>
-        <table class="table" style="background-color: snow">
+        <table class="table">
             <thead class="thead-light">
                 <tr>
                     <th scope="col" style="width:30%">ID</th>
@@ -274,8 +236,21 @@
 
                 </tr>
             </thead>
-            <tbody id="comment_table">
-
+            <tbody id="tbody-box">
+                <tr id="word-word">
+                    <td><a href="#">힘내!! </a></td>
+                    <td>성장이 목표니까 해낼 수 있어요. !!
+                    </td>
+                </tr>
+                <tr id="word-dictionary">
+                    <td><a href="#">하루가 일주일</a></td>
+                    <td>너무너무 힘드네요.
+                    </td>
+                </tr>
+                <tr id="word-name">
+                    <td><a href="#">브런치 충돌</a></td>
+                    <td>사고치면서 배우는거지 모..하지만.. 더이상은 ..</td>
+                </tr>
             </tbody>
         </table>
 

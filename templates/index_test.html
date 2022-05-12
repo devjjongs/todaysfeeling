@@ -35,11 +35,20 @@
 
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
 
-
     <script>
         $(document).ready(function () {
             get_posts();
         });
+
+        function log_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+
+        function go_to_postpage() {
+            window.location.href = "/post?${id}"
+        }
 
         function get_posts() {
             $.ajax({
@@ -72,21 +81,10 @@
         }
 
         <!--로그아웃 function-->
-        function log_out() {
-            $.removeCookie('mytoken', {path: '/'});
-            alert('로그아웃!')
-            window.location.href = "/login"
-        }
-
-        <!--로그아웃 function-->
         function sign_out() {
             $.removeCookie('mytoken', {path: '/'});
             alert('로그아웃!')
             window.location.href = "/login"
-        }
-
-        function go_to_postpage() {
-            window.location.href = "/post?${id}"
         }
     </script>
     <style>
@@ -117,20 +115,15 @@
             color: #e8344e !important;
         }
 
-        .search-bar {
-            margin-left: 120px;
-            margin-top: 50px;
-            margin-bottom: -50px;
+        .navbar {
+            background-color: snow;
         }
 
-        .navbar-end {
-            margin-right: 200px;
-            margin-bottom: -50px;
-        }
-
-        .navbar-post {
-            margin-left: 200px;
-            margin-bottom: 20px;
+        .logout_wrap {
+            margin-right: 20px;
+            margin-top: 20px;
+            float: right;
+            position: absolute;
         }
 
         .btn btn-outline-secondary {
@@ -141,6 +134,35 @@
             width: 100%
         }
 
+        .title_button_wrap {
+            margin: 20px 20px auto 20px;
+        }
+
+        .logout_wrap {
+            float: right;
+        }
+
+        .h1_wrap {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title_h1 {
+            text-align: center;
+            font-weight: bold;
+            width: 250px;
+        }
+
+        .image.is-256x256 {
+            height: 256px;
+            width: 256px;
+            margin: 30px auto 30px auto;
+            text-align: center;
+            vertical-align: center;
+        }
+
         .index-section {
             padding: 100px;
         }
@@ -149,7 +171,9 @@
             margin: auto 20px auto 20px;
             height: 300px;
         }
+
     </style>
+
 </head>
 <body>
 

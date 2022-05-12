@@ -42,6 +42,7 @@ def login ():
 def write ():
     return render_template('write.html')
 
+
 # post 추가부분
 @app.route('/post')
 def detail ():
@@ -138,21 +139,60 @@ def post_upload ():
 # /post : 포스팅 조회값 불러오기
 @app.route("/get_posts", methods=['GET'])
 def get_posts ():
+    try:
+        # 포스팅 목록 받아오기
+        posts = list(db.writes.find({}).sort("date", -1).limit(12))  # 포스트 전체 목록증 최근순으로 12개만 가져오는 코드
+        for post in posts:
+            post["_id"] = str(post["_id"])  # 포스트 작성한 id를 문자열로 바꿔준다.
+        return jsonify({"result": "success", "posts": posts})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+
+# 이건 포스트 하나만 가져오는 함수
+@app.route("/get_post", methods=['GET'])
+def get_post ():
     token_receive = request.cookies.get('mytoken')
+    post_id_receive = request.form['post_id_give']
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 포스팅 목록 받아오기
-        posts = list(db.writes.find({}).sort("date", -1).limit(20))  # 포스트 전체 목록증 최근순으로 20개만 가져오는 코드
-        for post in posts:
-            post["_id"] = str(post["_id"])  # 포스트 작성한 id를 문자열로 바꿔준다.
-        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
+        post_id = str(post_id_receive)
+        post = list(db.writes.find_one({"post_id": post_id}))
+        post["_id"] = str(post["_id"])  # 포스트 작성한 id를 문자열로 바꿔준다.
+        post["count_heart"] = db.likes.count_documents({"post_id": post["_id"]})
+        post["heart_by_me"] = bool(
+            db.likes.find_one({"post_id": post["_id"], "username": payload['id']}))
+        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "post": post})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+
+@app.route("/update_like", methods=['POST'])
+def update_like ():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        post_id_receive = request.form["post_id_give"]
+        action_receive = request.form["action_give"]
+        doc = {
+            "post_id": post_id_receive,
+            "username": user_info["username"],
+        }
+        if action_receive == "like":
+            db.likes.insert_one(doc)
+        else:
+            db.likes.delete_one(doc)
+        count = db.likes.count_documents({"post_id": post_id_receive})
+        return jsonify({"result": "success", 'msg': 'updated', "count": count})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
 
 # /comments : 댓글 올리기
 @app.route("/post/comment_up", methods=["POST"])
-def comment_post():
+def comment_post ():
     token_receive = request.cookies.get('mytoken')
     try:
         # 토큰을 넘겨주지 않아도 토큰리시브(쿠키스)로 항상 가져올 수 있다.
@@ -176,7 +216,7 @@ def comment_post():
 
 # /comments : 댓글 값 조회하기
 @app.route("/post/comment_search", methods=["GET"])
-def comment_get():
+def comment_get ():
     token_receive = request.cookies.get('mytoken')
     try:
         # 토큰을 넘겨주지 않아도 토큰리시브(쿠키스)로 항상 가져올 수 있다.
