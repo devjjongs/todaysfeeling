@@ -152,47 +152,46 @@
     </style>
 </head>
 <body>
-
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-end">
-            <div class="navbar-item">
-                <div class="buttons">
-                    <a class="button is-light" onclick="javascript:sign_out();">
-                        Logout
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
     <section onclick="to_index()" class="hero is-snow">
         <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
             <h1 class="title is-sparta">Today's vibe</h1>
             <h3 class="subtitle is-sparta">오늘의 기분</h3>
         </div>
     </section>
+    <div class="search-bar">
+        <form method="GET" action="/search">
+            <div class="field is-grouped" style="width: 500px; text-align: right; margin: 0 0 100px 100px">
+                <p class="control is-expanded">
+                    <input class="input" type="text" placeholder="#태그 검색.." name="name">
+                </p>
+                <p class="control">
+                    <button type="submit" class="button is-info">
+                        검색하기
+                    </button>
+                </p>
+            </div>
+        </form>
+    </div>
 
-    <form method="GET" action="/search">
-        <div class="field is-grouped" style="width: 500px; text-align: right; margin: 0 0 100px 100px">
-            <p class="control is-expanded">
-                <input class="input" type="text" placeholder="#태그 검색.." name="name">
-            </p>
-            <p class="control">
-                <button type="submit" class="button is-info">
-                    검색하기
-                </button>
-            </p>
-
-            <div class="navbar-post">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-light" onclick="window.location.href='/write'">
-                            내사진 올리기
-                        </a>
-                    </div>
-                </div>
+    <div class="navbar-end">
+        <div class="navbar-item">
+            <div class="buttons">
+                <a class="button is-light" onclick="sign_out();">
+                    Logout
+                </a>
             </div>
         </div>
-    </form>
+    </div>
+
+    <div class="navbar-post">
+        <div class="navbar-item">
+            <div class="buttons">
+                <a class="button is-light" onclick="window.location.href='/write'">
+                    내사진 올리기
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="test">
         <section class="index-section">
             <div class="row row-cols-1 row-cols-md-4 g-4" id="image_container">
