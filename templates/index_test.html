@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <!-- Webpage Title -->
+    <title>Home | Today's Vibe</title>
+
+    <!--    부트스크랩 링크-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Bulma CSS 링크 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Carme&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Carme&family=Fraunces:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Carme&family=Fraunces:wght@500&family=Montserrat:ital,wght@0,300;0,400;1,300&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='cm_style.css') }}" rel="stylesheet">
+
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+
+    <script>
+        $(document).ready(function () {
+            get_posts();
+        });
+
+        function log_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+
+        function go_to_postpage() {
+            window.location.href = "/post?${id}"
+        }
+
+        function get_posts() {
+            $.ajax({
+                type: "GET",
+                url: "/get_posts",
+                data: {},
+                success: function (response) {
+                    let rows = response['posts']
+                    console.log(rows)
+                    for (let i = 0; i < rows.length; i++) {
+                        let file_name = rows[i]['file']
+                        let post_id = rows[i]['_id']
+
+                        console.log(file_name, post_id)
+
+                        let temp_html =
+                            `<div class="card index-card" style="border-radius:25px;">
+                                <div class="card-image">
+                                    <figure class="image is-256x256">
+                                        <img class="real_image" src="/static/images/${file_name}" id="${post_id}" onclick="go_to_postpage(id)" alt="Image"/>
+                                    </figure>
+                                </div>
+                            </div>`
+
+                        $('#image_container').append(temp_html)
+                    }
+
+                }
+            })
+        }
+
+        <!--로그아웃 function-->
+        function sign_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+    </script>
+    <style>
+
+        body {
+            background-color: snow;
+            min-height: 100vh;
+        }
+
+        .section {
+            padding: 1rem 1.5rem;
+            max-width: 750px;
+            margin: auto;
+        }
+
+        .title {
+            font-weight: 800;
+            font-size: 5rem;
+            font-family: 'Gamja Flower', cursive;
+        }
+
+        .subtitle {
+            font-size: 2rem;
+            font-family: 'Stylish', sans-serif;
+        }
+
+        .is-sparta {
+            color: #e8344e !important;
+        }
+
+        .navbar {
+            background-color: snow;
+        }
+
+        .logout_wrap {
+            margin-right: 20px;
+            margin-top: 20px;
+            float: right;
+            position: absolute;
+
+        }
+
+        .btn btn-outline-secondary {
+            float: right;
+        }
+
+        .hero-body has-text-centered {
+            width: 100%
+        }
+
+        .title_button_wrap {
+            margin: 20px 20px auto 20px;
+        }
+
+        .logout_wrap {
+            float: right;
+        }
+
+        .h1_wrap {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title_h1 {
+            text-align: center;
+            font-weight: bold;
+            width: 250px;
+        }
+        .image.is-256x256 {
+            height: 256px;
+            width: 256px;
+            margin: 30px auto 30px auto;
+            text-align: center;
+            vertical-align: center;
+        }
+
+        .index-section {
+            padding: 100px;
+        }
+
+        .card index-card {
+            margin: auto 20px auto 20px;
+            height: 300px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    <a class="button is-light" onclick="javascript:sign_out();">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section onclick="to_index()" class="hero is-snow">
+        <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
+            <h1 class="title is-sparta">Today's vibe</h1>
+            <h3 class="subtitle is-sparta">오늘의 기분</h3>
+        </div>
+    </section>
+
+    <form method="GET" action="/search">
+        <div class="field is-grouped" style="width: 500px; text-align: right; margin: 0 0 100px 100px">
+            <p class="control is-expanded">
+                <input class="input" type="text" placeholder="#태그 검색.." name="name">
+            </p>
+            <p class="control">
+                <button type="submit" class="button is-info">
+                    검색하기
+                </button>
+            </p>
+
+            <div class="navbar-post">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-light" onclick="window.location.href='/write'">
+                            내사진 올리기
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="test">
+        <section class="index-section">
+            <div class="row row-cols-1 row-cols-md-4 g-4" id="image_container">
+
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -133,23 +133,23 @@ def post_upload ():
         # return redirect(url_for("home"))
         return redirect('/')
 
-
+# 여기서부터 현빈 인덱스 만짐
+# 이건 포스트 여러개 가져오는 함수
 @app.route("/get_posts", methods=['GET'])
 def get_posts ():
-    token_receive = request.cookies.get('mytoken')
     try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 포스팅 목록 받아오기
-        posts = list(db.writes.find({}).sort("date", -1).limit(20))  # 포스트 전체 목록증 최근순으로 20개만 가져오는 코드
+        posts = list(db.writes.find({}).sort("date", -1).limit(12))  # 포스트 전체 목록증 최근순으로 12개만 가져오는 코드
         for post in posts:
             post["_id"] = str(post["_id"])  # 포스트 작성한 id를 문자열로 바꿔준다.
-        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
+        return jsonify({"result": "success", "posts": posts})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
+# 여기까지 현빈 인덱스 만짐
 
-# 여기서부터 현빈 만짐
-
+# 여기서부터 현빈 좋아요 만짐
+# 이건 포스트 하나만 가져오는 함수
 @app.route("/get_post", methods=['GET'])
 def get_post ():
     token_receive = request.cookies.get('mytoken')
@@ -191,6 +191,10 @@ def update_like():
 @app.route('/post_test')
 def test_post():
     return render_template("post_test.html")
+
+@app.route('/index_test')
+def test_index():
+    return render_template("index_test.html")
 
 # 여기까지 현빈 만짐
 
