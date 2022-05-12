@@ -35,60 +35,6 @@
 
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
 
-
-    <script>
-        $(document).ready(function () {
-            get_posts();
-        });
-
-        function get_posts() {
-            $.ajax({
-                type: "GET",
-                url: "/get_posts",
-                data: {},
-                success: function (response) {
-                    let rows = response['posts']
-                    console.log(rows)
-                    for (let i = 0; i < rows.length; i++) {
-                        let file_name = rows[i]['file']
-                        let post_id = rows[i]['_id']
-
-                        console.log(file_name, post_id)
-
-                        let temp_html =
-                            `<div class="card index-card" style="border-radius:25px;">
-                                <div class="card-image">
-                                    <figure class="image is-256x256">
-                                        <img class="real_image" src="/static/images/${file_name}" id="${post_id}" onclick="go_to_postpage(id)" alt="Image"/>
-                                    </figure>
-                                </div>
-                            </div>`
-
-                        $('#image_container').append(temp_html)
-                    }
-
-                }
-            })
-        }
-
-        <!--로그아웃 function-->
-        function log_out() {
-            $.removeCookie('mytoken', {path: '/'});
-            alert('로그아웃!')
-            window.location.href = "/login"
-        }
-
-        <!--로그아웃 function-->
-        function sign_out() {
-            $.removeCookie('mytoken', {path: '/'});
-            alert('로그아웃!')
-            window.location.href = "/login"
-        }
-
-        function go_to_postpage() {
-            window.location.href = "/post?${id}"
-        }
-    </script>
     <style>
 
         body {
@@ -150,6 +96,61 @@
             height: 300px;
         }
     </style>
+
+    <script>
+        $(document).ready(function () {
+            get_posts();
+        });
+
+        function get_posts() {
+            $.ajax({
+                type: "GET",
+                url: "/get_posts",
+                data: {},
+                success: function (response) {
+                    let rows = response['posts']
+                    console.log(rows)
+                    for (let i = 0; i < rows.length; i++) {
+                        let file_name = rows[i]['file']
+                        let post_id = rows[i]['_id']
+
+                        console.log(file_name, post_id)
+
+                        let temp_html =
+                            `<div class="card index-card" style="border-radius:25px;">
+                                <div class="card-image">
+                                    <figure class="image is-256x256">
+                                        <img class="real_image" src="/static/images/${file_name}" id="${post_id}" onclick="go_to_postpage(this.id)" alt="Image"/>
+                                    </figure>
+                                </div>
+                            </div>`
+
+                        $('#image_container').append(temp_html)
+                    }
+
+                }
+            })
+        }
+
+        <!--로그아웃 function-->
+        function log_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+
+        <!--로그아웃 function-->
+        function sign_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+
+        function go_to_postpage(clicked_id) {
+            window.location.href = "/post?clicked_id=" + clicked_id;
+        }
+    </script>
+
 </head>
 <body>
     <section onclick="to_index()" class="hero is-snow">
