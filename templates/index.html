@@ -81,79 +81,102 @@
             color: #e8344e !important;
         }
 
-        .navbar {
-            background-color: snow;
+        .search-bar {
+            margin-left: 120px;
+            margin-top: 50px;
+            margin-bottom: -50px;
+        }
+
+        .navbar-end {
+            margin-right: 200px;
+            margin-bottom: -50px;
+        }
+
+        .navbar-post {
+            margin-left: 200px;
+            margin-bottom: 20px;
         }
     </style>
-
 </head>
+
 <body>
+<section class="hero is-snow">
+    <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
+        <h1 class="title is-sparta">Today's vibe</h1>
+        <h3 class="subtitle is-sparta">오늘의 기분</h3>
+    </div>
+</section>
 
-    <section class="hero is-snow">
-        <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
-            <h1 class="title is-sparta">Today's vibe</h1>
-            <h3 class="subtitle is-sparta">오늘의 기분</h3>
+<!--            <div class="navbar-item has-dropdown is-hoverable">-->
+<!--                <a class="navbar-link">-->
+<!--                    Mypage-->
+<!--                </a>-->
+<!--                <div class="navbar-dropdown">-->
+<!--                    <a class="navbar-item" onclick="window.location.href='/mypage'">-->
+<!--                        My Comment-->
+<!--                    </a>-->
+<!--                    <a class="navbar-item" onclick="window.location.href='/mylike'">-->
+<!--                        My favorite-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<div class="search-bar">
+<form method="GET" action="/search">
+    <div class="field is-grouped" style="width: 500px; text-align: right; margin: 0 0 100px 100px">
+        <p class="control is-expanded">
+            <input class="input" type="text" placeholder="#태그 검색.." name="name">
+        </p>
+        <p class="control">
+            <button type="submit" class="button is-info">
+                검색하기
+            </button>
+        </p>
+    </div>
+</form>
+</div>
+
+<div class="navbar-end">
+    <div class="navbar-item">
+        <div class="buttons">
+            <a class="button is-light" onclick="javascript:sign_out();">
+                Logout
+            </a>
         </div>
-    </section>
+    </div>
+</div>
+</div>
 
+<div class="navbar-post">
+    <div class="navbar-item">
+        <div class="buttons">
+            <a class="button is-light" onclick="window.location.href='/write'">
+                내사진 올리기
+            </a>
+        </div>
+    </div>
+</div>
 
-                <!--            <div class="navbar-item has-dropdown is-hoverable">-->
-                <!--                <a class="navbar-link">-->
-                <!--                    Mypage-->
-                <!--                </a>-->
-                <!--                <div class="navbar-dropdown">-->
-                <!--                    <a class="navbar-item" onclick="window.location.href='/mypage'">-->
-                <!--                        My Comment-->
-                <!--                    </a>-->
-                <!--                    <a class="navbar-item" onclick="window.location.href='/mylike'">-->
-                <!--                        My favorite-->
-                <!--                    </a>-->
-                <!--                </div>-->
-                <!--            </div>-->
-
-
-    <form method="GET" action="/search">
-        <div class="field is-grouped" style="width: 500px; text-align: right; margin: 0 0 100px 100px">
-            <p class="control is-expanded">
-                <input class="input" type="text" placeholder="#태그 검색.." name="name">
-            </p>
-            <p class="control">
-                <button type="submit" class="button is-info">
-                    검색하기
-                </button>
-            </p>
-
-            <div class="navbar-post">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-light" onclick="window.location.href='/write'">
-                            내사진 올리기
-                        </a>
+<div class="test">
+    <section class="index-section">
+        <div class="container index-container">
+            {% for post in posts %}
+                <div class="card index-card" style="border-radius:25px;">
+                    <div class="card-image">
+                        <figure>
+                            <a href="/write/{{ post.name }}"><img src="../static/{{ post.file }}"
+                                                                  style="width:300px; height:300px; max-width: 400px; max-height: 400px;"></a>
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="content">
+                            <a class="card-title" href="/write/{{ post.name }}">{{ post.name }}</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
-    </form>
-    <div class="test">
-        <section class="index-section">
-            <div class="container index-container">
-                {% for post in posts %}
-                    <div class="card index-card" style="border-radius:25px;">
-                        <div class="card-image">
-                            <figure>
-                                <a href="/detail/{{ post.name }}"><img src="../static/{{ post.file }}"
-                                                                       style="width:300px; height:300px; max-width: 400px; max-height: 400px;"></a>
-                            </figure>
-                        </div>
-                        <div class="card-content">
-                            <div class="content">
-                                <a class="card-title" href="/detail/{{ post.name }}">{{ post.name }}</a>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </section>
-    </div>
+    </section>
+</div>
 </body>
 </html>
