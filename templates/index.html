@@ -31,13 +31,13 @@
 
     <script>
         $(document).ready(function () {
-            get_posts();
+            get_post();
         });
 
-        function get_posts() {
+        function get_post() {
             $.ajax({
                 type: "GET",
-                url: "/get_posts",
+                url: "/get_post",
                 data: {},
                 success: function (response) {
                     alert(response["msg"])
@@ -110,12 +110,7 @@
                 <!--                    </a>-->
                 <!--                </div>-->
                 <!--            </div>-->
-                {#<!--            {% if user_info.username == 'admin' %}-->
 
-<!--            <a class="navbar-item" onclick="window.location.href='/admin'">-->
-<!--                Admin-->
-<!--            </a>-->
-<!--            {% endif %}-->#}
 
     <form method="GET" action="/search">
         <div class="field is-grouped" style="width: 500px; text-align: right; margin: 0 0 100px 100px">
