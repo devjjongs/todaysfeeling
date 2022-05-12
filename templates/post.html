@@ -103,9 +103,10 @@
                     let rows = response['comments']
                     for(let i=0; i<rows.length; i++) {
                         let comment = rows[i]['comment']
+                        let username = rows[i]['username']
 
-                        let temp_html = `<tr id="word-word">
-                                            <td><a href="#">힘내!! </a></td>
+                        let temp_html = `<tr>
+                                            <td><a href="#">${username} </a></td>
                                             <td>${comment}</td>
                                         </tr>`
                         $('#comment_table').append(temp_html)
@@ -118,11 +119,15 @@
         {## /comments : 댓글 올리기#}
         function comment_post() {
             let comment = $('#comment').val()
+            let today = new Date().toISOString()
 
             $.ajax({
                 type: 'POST',
                 url: '/post/comment_up',
-                data: {comment_give: comment},
+                data: {
+                    comment_give: comment,
+                    date_give: today
+                },
                 success: function (response) {
                     alert(response['msg'])
                     window.location.reload()
