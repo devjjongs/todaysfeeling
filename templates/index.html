@@ -153,12 +153,24 @@
 
 </head>
 <body>
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    <a class="button is-light" onclick="sign_out();">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
     <section onclick="to_index()" class="hero is-snow">
         <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
             <h1 class="title is-sparta">Today's vibe</h1>
             <h3 class="subtitle is-sparta">오늘의 기분</h3>
         </div>
     </section>
+
     <div class="search-bar">
         <form method="GET" action="/search">
             <div class="field is-grouped" style="width: 500px; text-align: right; margin: 0 0 100px 100px">

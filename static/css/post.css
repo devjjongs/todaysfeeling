@@ -1,3 +1,29 @@
+body {
+    background-color: snow;
+    min-height: 100vh;
+}
+
+.section {
+    padding: 1rem 1.5rem;
+    max-width: 750px;
+    margin: auto;
+}
+
+.title {
+    font-weight: 800;
+    font-size: 5rem;
+    font-family: 'Gamja Flower', cursive;
+}
+
+.subtitle {
+    font-size: 2rem;
+    font-family: 'Stylish', sans-serif;
+}
+
+.is-sparta {
+    color: #e8344e !important;
+}
+
 .title_button_wrap {
     margin: 20px 20px auto 20px;
 }
@@ -6,18 +32,18 @@
     float: right;
 }
 
-.h1_wrap {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+/*.h1_wrap {*/
+/*    text-align: center;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*}*/
 
-.title_h1 {
-    text-align: center;
-    font-weight: bold;
-    width: 250px;
-}
+/*.title_h1 {*/
+/*    text-align: center;*/
+/*    font-weight: bold;*/
+/*    width: 250px;*/
+/*}*/
 
 .body_wrap {
     text-align: center;
@@ -32,7 +58,7 @@
 }
 
 .body_right {
-    display:inline-block;
+    display: inline-block;
     width: 45%;
     float: right;
     margin-top: 30px;
@@ -65,7 +91,7 @@
 }
 
 .form-control1 {
-    display:inline-block;
+    display: inline-block;
     width: 150px;
     height: 30px;
 }
@@ -104,10 +130,10 @@
 
 /*여기서부터 cropperjs 시작*/
 .img {
-  display: block;
+    display: block;
 
-  /* This rule is very important, please don't ignore this */
-  max-width: 100%;
+    /* This rule is very important, please don't ignore this */
+    max-width: 100%;
 }
 
 .photo_box {
@@ -155,7 +181,7 @@
     margin-top: 20px;
     width: 100%;
     height: 250px;
-    background:#eee;
+    background: #eee;
 }
 
 .them_img, .result_box {
@@ -190,16 +216,16 @@
 /*여기까지 cropperjs*/
 
 [type=radio] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 [type=radio] + img {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 [type=radio]:checked + img {
-  outline: 2px solid #D2B48C;
+    outline: 2px solid #D2B48C;
 }
